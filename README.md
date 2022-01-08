@@ -5,7 +5,7 @@ Logiciel permettant de télécharger automatiquement toutes les versions du _Dat
 ## Installation
 
 ```bash
-git clone https://github.com/InFinity54/LoR_DataDragonDownloader.git LoR_DataDragonDownloader
+git clone https://github.com/InFinity54/LoR_DDragonDownloader.git LoR_DDragonDownloader
 ```
 
 ## Démarrage
@@ -24,6 +24,6 @@ Il existe deux modes de fonctionnement, qui sont automatiques :
 
 Quel que soit le mode sélectionné, chaque version est divisée en plusieurs dizaines de dossiers compressés au format ZIP. Le programme se charge de les extraire afin de créer une arborescence précise, qui facilite l'utilisation du Data Dragon. Le programme se charge également de supprimer certains fichiers inutiles et d'en générer d'autres qui peuvent être utiles. Libre à vous de modifier les dossiers et fichiers téléchargés, ou même d'en supprimer une partie.
 
-## Note
+## Note for non-French people
 
-Comme je n'exclus pas de traduire le programme, les commits seront écrits en anglais, bien que le contenu du dépôt soit en français dès que cela est possible pour le moment.
+Commits are already written in English to prepare a future translation of the code source and of this README file, which is coming in the next months.
