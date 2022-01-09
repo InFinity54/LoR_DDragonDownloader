@@ -112,7 +112,8 @@ namespace LoR_DDragonDownloader
             {
                 if (MessageBox.Show("Le dossier de téléchargement spécifié n'est pas vide. Si vous continuez, le programme videra le contenu du dossier choisi, et ce dernier sera définitivement perdu." + Environment.NewLine + "Voulez-vous continuer ?", "Legends of Runeterra - Data Dragon Downloader", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    // todo : remove and recreate dest folder
+                    Directory.Delete(MainForm_Settings_DownloadFolder_TextBox.Text, true);
+                    Directory.CreateDirectory(MainForm_Settings_DownloadFolder_TextBox.Text);
                     StartingDownload();
                 }
             }
