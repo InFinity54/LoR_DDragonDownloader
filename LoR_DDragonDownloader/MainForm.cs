@@ -45,11 +45,7 @@ namespace LoR_DDragonDownloader
 
             foreach (string version in json)
             {
-                // temp le temps de debug la connerie de Rito :)
-                if (version != "1.0.0" && version != "1.1.0" && version != "1.2.0")
-                {
-                    versions.Add(version);
-                }
+                versions.Add(version);
             }
         }
 
