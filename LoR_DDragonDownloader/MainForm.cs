@@ -45,7 +45,11 @@ namespace LoR_DDragonDownloader
 
             foreach (string version in json)
             {
-                versions.Add(version);
+                // temp le temps de debug la connerie de Rito :)
+                if (version != "1.0.0" && version != "1.1.0" && version != "1.2.0")
+                {
+                    versions.Add(version);
+                }
             }
         }
 
@@ -108,6 +112,7 @@ namespace LoR_DDragonDownloader
             {
                 if (MessageBox.Show("Le dossier de téléchargement spécifié n'est pas vide. Si vous continuez, le programme videra le contenu du dossier choisi, et ce dernier sera définitivement perdu." + Environment.NewLine + "Voulez-vous continuer ?", "Legends of Runeterra - Data Dragon Downloader", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
+                    // todo : remove and recreate dest folder
                     StartingDownload();
                 }
             }
@@ -238,6 +243,34 @@ namespace LoR_DDragonDownloader
 
                             // Une fois le fichier extrait, on réorganise le dossier
                             string versionRootFolder = Path.Combine(MainForm_Settings_DownloadFolder_TextBox.Text, version, set);
+                            bool specialExtract = false;
+
+                            // Si l'extraction a eu lieu dans un sous-dossier portant le nom du fichier, on déplace son contenu dans le dossier supérieur.
+                            // C'est notamment le cas sur la version 1.3.0.
+                            if (Directory.Exists(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName))))
+                            {
+                                specialExtract = true;
+                                currentTask = "Préparation...";
+                                List<String> tmpFilesToMove = Directory.GetFiles(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName)), "*.*", SearchOption.AllDirectories).ToList();
+                                int totalTmpFilesToMove = tmpFilesToMove.Count;
+                                int tmpFilesMoved = 0;
+
+                                foreach (string tmpFile in tmpFilesToMove)
+                                {
+                                    string newTmpFile = tmpFile.Replace("\\" + Path.GetFileNameWithoutExtension(fileName), "");
+
+                                    if (!Directory.Exists(Path.GetDirectoryName(newTmpFile)))
+                                    {
+                                        Directory.CreateDirectory(Path.GetDirectoryName(newTmpFile));
+                                    }
+
+                                    File.Move(tmpFile, newTmpFile, true);
+                                    tmpFilesMoved++;
+                                    currentTaskProgress = (int)Math.Round((Convert.ToDecimal(tmpFilesMoved) / totalTmpFilesToMove), 0);
+                                }
+
+                                Directory.Delete(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName)), true);
+                            }
 
                             // Si le set actuel est différent du core, il faut traiter les images des cartes en premier
                             if (set != "core")
@@ -260,6 +293,20 @@ namespace LoR_DDragonDownloader
                                     cardsMoved++;
                                     currentTaskProgress = (int)Math.Round((Convert.ToDecimal(cardsMoved) / totalCardsToMove), 0);
                                 }
+                            }
+
+                            // Si l'extraction a eu lieu dans un sous-dossier portant le nom du fichier, on recrée le dossier "data".
+                            if (specialExtract && set != "core")
+                            {
+                                string originalFile = Path.Combine(extractDirectory, lang, "data.json");
+                                string destinationFile = Path.Combine(extractDirectory, lang, "data", set + "-" + lang + ".json");
+
+                                if (!Directory.Exists(Path.Combine(extractDirectory, lang, "data")))
+                                {
+                                    Directory.CreateDirectory(Path.Combine(extractDirectory, lang, "data"));
+                                }
+
+                                File.Move(originalFile, destinationFile);
                             }
 
                             currentTask = "Déplacement des fichiers...";
