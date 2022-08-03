@@ -44,6 +44,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_CurrentVersionProgressBar = new System.Windows.Forms.ProgressBar();
             this.MainForm_GlobalProgressBar = new System.Windows.Forms.ProgressBar();
             this.MainForm_Group_Settings = new System.Windows.Forms.GroupBox();
+            this.MainForm_Settings_DownloadFolder_Browse = new System.Windows.Forms.Button();
             this.MainForm_Settings_DownloadFolder_TextBox = new System.Windows.Forms.TextBox();
             this.MainForm_Settings_DownloadFolder_Label = new System.Windows.Forms.Label();
             this.MainForm_Button_StartDownload = new System.Windows.Forms.Button();
@@ -51,10 +52,13 @@ namespace LoR_DDragonDownloader
             this.DataDragonWorker = new System.ComponentModel.BackgroundWorker();
             this.AutoRefreshForm = new System.Windows.Forms.Timer(this.components);
             this.DownloadFolderSelect = new System.Windows.Forms.FolderBrowserDialog();
-            this.MainForm_Settings_DownloadFolder_Browse = new System.Windows.Forms.Button();
+            this.MainForm_Group_SortType = new System.Windows.Forms.GroupBox();
+            this.MainForm_SortBySet = new System.Windows.Forms.RadioButton();
+            this.MainForm_SortInOneFolder = new System.Windows.Forms.RadioButton();
             this.MainForm_Group_DownloadMode.SuspendLayout();
             this.MainForm_Group_DownloadProgress.SuspendLayout();
             this.MainForm_Group_Settings.SuspendLayout();
+            this.MainForm_Group_SortType.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainForm_Title
@@ -121,7 +125,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_DownloadProgress.Controls.Add(this.MainForm_CurrentVersionProgressLabel);
             this.MainForm_Group_DownloadProgress.Controls.Add(this.MainForm_CurrentVersionProgressBar);
             this.MainForm_Group_DownloadProgress.Controls.Add(this.MainForm_GlobalProgressBar);
-            this.MainForm_Group_DownloadProgress.Location = new System.Drawing.Point(12, 175);
+            this.MainForm_Group_DownloadProgress.Location = new System.Drawing.Point(12, 231);
             this.MainForm_Group_DownloadProgress.Name = "MainForm_Group_DownloadProgress";
             this.MainForm_Group_DownloadProgress.Size = new System.Drawing.Size(860, 196);
             this.MainForm_Group_DownloadProgress.TabIndex = 3;
@@ -184,12 +188,23 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_Settings.Controls.Add(this.MainForm_Settings_DownloadFolder_Browse);
             this.MainForm_Group_Settings.Controls.Add(this.MainForm_Settings_DownloadFolder_TextBox);
             this.MainForm_Group_Settings.Controls.Add(this.MainForm_Settings_DownloadFolder_Label);
-            this.MainForm_Group_Settings.Location = new System.Drawing.Point(12, 377);
+            this.MainForm_Group_Settings.Location = new System.Drawing.Point(12, 433);
             this.MainForm_Group_Settings.Name = "MainForm_Group_Settings";
             this.MainForm_Group_Settings.Size = new System.Drawing.Size(558, 72);
             this.MainForm_Group_Settings.TabIndex = 4;
             this.MainForm_Group_Settings.TabStop = false;
             this.MainForm_Group_Settings.Text = "Paramètres de l\'application";
+            // 
+            // MainForm_Settings_DownloadFolder_Browse
+            // 
+            this.MainForm_Settings_DownloadFolder_Browse.ForeColor = System.Drawing.Color.Black;
+            this.MainForm_Settings_DownloadFolder_Browse.Location = new System.Drawing.Point(477, 14);
+            this.MainForm_Settings_DownloadFolder_Browse.Name = "MainForm_Settings_DownloadFolder_Browse";
+            this.MainForm_Settings_DownloadFolder_Browse.Size = new System.Drawing.Size(75, 23);
+            this.MainForm_Settings_DownloadFolder_Browse.TabIndex = 2;
+            this.MainForm_Settings_DownloadFolder_Browse.Text = "Parcourir";
+            this.MainForm_Settings_DownloadFolder_Browse.UseVisualStyleBackColor = true;
+            this.MainForm_Settings_DownloadFolder_Browse.Click += new System.EventHandler(this.MainForm_Settings_DownloadFolder_Browse_Click);
             // 
             // MainForm_Settings_DownloadFolder_TextBox
             // 
@@ -210,7 +225,7 @@ namespace LoR_DDragonDownloader
             // MainForm_Button_StartDownload
             // 
             this.MainForm_Button_StartDownload.ForeColor = System.Drawing.Color.Black;
-            this.MainForm_Button_StartDownload.Location = new System.Drawing.Point(598, 404);
+            this.MainForm_Button_StartDownload.Location = new System.Drawing.Point(598, 460);
             this.MainForm_Button_StartDownload.Name = "MainForm_Button_StartDownload";
             this.MainForm_Button_StartDownload.Size = new System.Drawing.Size(193, 23);
             this.MainForm_Button_StartDownload.TabIndex = 5;
@@ -221,7 +236,7 @@ namespace LoR_DDragonDownloader
             // MainForm_Button_Quit
             // 
             this.MainForm_Button_Quit.ForeColor = System.Drawing.Color.Black;
-            this.MainForm_Button_Quit.Location = new System.Drawing.Point(797, 404);
+            this.MainForm_Button_Quit.Location = new System.Drawing.Point(797, 460);
             this.MainForm_Button_Quit.Name = "MainForm_Button_Quit";
             this.MainForm_Button_Quit.Size = new System.Drawing.Size(75, 23);
             this.MainForm_Button_Quit.TabIndex = 6;
@@ -239,24 +254,47 @@ namespace LoR_DDragonDownloader
             this.AutoRefreshForm.Interval = 150;
             this.AutoRefreshForm.Tick += new System.EventHandler(this.AutoRefreshForm_Tick);
             // 
-            // MainForm_Settings_DownloadFolder_Browse
+            // MainForm_Group_SortType
             // 
-            this.MainForm_Settings_DownloadFolder_Browse.ForeColor = System.Drawing.Color.Black;
-            this.MainForm_Settings_DownloadFolder_Browse.Location = new System.Drawing.Point(477, 14);
-            this.MainForm_Settings_DownloadFolder_Browse.Name = "MainForm_Settings_DownloadFolder_Browse";
-            this.MainForm_Settings_DownloadFolder_Browse.Size = new System.Drawing.Size(75, 23);
-            this.MainForm_Settings_DownloadFolder_Browse.TabIndex = 2;
-            this.MainForm_Settings_DownloadFolder_Browse.Text = "Parcourir";
-            this.MainForm_Settings_DownloadFolder_Browse.UseVisualStyleBackColor = true;
-            this.MainForm_Settings_DownloadFolder_Browse.Click += new System.EventHandler(this.MainForm_Settings_DownloadFolder_Browse_Click);
+            this.MainForm_Group_SortType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MainForm_Group_SortType.Controls.Add(this.MainForm_SortBySet);
+            this.MainForm_Group_SortType.Controls.Add(this.MainForm_SortInOneFolder);
+            this.MainForm_Group_SortType.Location = new System.Drawing.Point(12, 175);
+            this.MainForm_Group_SortType.Name = "MainForm_Group_SortType";
+            this.MainForm_Group_SortType.Size = new System.Drawing.Size(860, 50);
+            this.MainForm_Group_SortType.TabIndex = 2;
+            this.MainForm_Group_SortType.TabStop = false;
+            this.MainForm_Group_SortType.Text = "Mode de rangement";
+            // 
+            // MainForm_SortBySet
+            // 
+            this.MainForm_SortBySet.AutoSize = true;
+            this.MainForm_SortBySet.Location = new System.Drawing.Point(385, 22);
+            this.MainForm_SortBySet.Name = "MainForm_SortBySet";
+            this.MainForm_SortBySet.Size = new System.Drawing.Size(270, 19);
+            this.MainForm_SortBySet.TabIndex = 1;
+            this.MainForm_SortBySet.Text = "Tri des différents sets dans des dossiers séparés";
+            this.MainForm_SortBySet.UseVisualStyleBackColor = true;
+            // 
+            // MainForm_SortInOneFolder
+            // 
+            this.MainForm_SortInOneFolder.AutoSize = true;
+            this.MainForm_SortInOneFolder.Location = new System.Drawing.Point(7, 22);
+            this.MainForm_SortInOneFolder.Name = "MainForm_SortInOneFolder";
+            this.MainForm_SortInOneFolder.Size = new System.Drawing.Size(146, 19);
+            this.MainForm_SortInOneFolder.TabIndex = 0;
+            this.MainForm_SortInOneFolder.Text = "Tri dans un seul dossier";
+            this.MainForm_SortInOneFolder.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(95)))), ((int)(((byte)(95)))));
-            this.ClientSize = new System.Drawing.Size(884, 461);
+            this.ClientSize = new System.Drawing.Size(884, 520);
             this.ControlBox = false;
+            this.Controls.Add(this.MainForm_Group_SortType);
             this.Controls.Add(this.MainForm_Button_Quit);
             this.Controls.Add(this.MainForm_Button_StartDownload);
             this.Controls.Add(this.MainForm_Group_Settings);
@@ -275,6 +313,8 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_DownloadProgress.ResumeLayout(false);
             this.MainForm_Group_Settings.ResumeLayout(false);
             this.MainForm_Group_Settings.PerformLayout();
+            this.MainForm_Group_SortType.ResumeLayout(false);
+            this.MainForm_Group_SortType.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -302,6 +342,9 @@ namespace LoR_DDragonDownloader
         private System.Windows.Forms.Timer AutoRefreshForm;
         private System.Windows.Forms.Button MainForm_Settings_DownloadFolder_Browse;
         private System.Windows.Forms.FolderBrowserDialog DownloadFolderSelect;
+        private System.Windows.Forms.GroupBox MainForm_Group_SortType;
+        private System.Windows.Forms.RadioButton MainForm_SortBySet;
+        private System.Windows.Forms.RadioButton MainForm_SortInOneFolder;
     }
 }
 

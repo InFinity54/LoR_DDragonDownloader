@@ -40,7 +40,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetVersionsList()
         {
-            string jsonString = new WebClient().DownloadString("https://private.infinity54.fr/runeterra_versions.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "\\database\\runeterra_versions.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
@@ -54,7 +54,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetLangsList()
         {
-            string jsonString = new WebClient().DownloadString("https://private.infinity54.fr/runeterra_langs.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "\\database\\runeterra_langs.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
@@ -68,7 +68,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetSetsList()
         {
-            string jsonString = new WebClient().DownloadString("https://private.infinity54.fr/runeterra_sets.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "\\database\\runeterra_sets.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
@@ -90,6 +90,12 @@ namespace LoR_DDragonDownloader
             if (!MainForm_DownloadModeLight.Checked == true && !MainForm_DownloadModeFull.Checked == true)
             {
                 MessageBox.Show("Vous devez sélectionner un mode de téléchargement pour continuer.", "Legends of Runeterra - Data Dragon Downloader", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (!MainForm_SortInOneFolder.Checked == true && !MainForm_SortBySet.Checked == true)
+            {
+                MessageBox.Show("Vous devez sélectionner un mode de tri pour continuer.", "Legends of Runeterra - Data Dragon Downloader", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -132,6 +138,10 @@ namespace LoR_DDragonDownloader
             // On empêche le changement de mode de téléchargement
             MainForm_DownloadModeLight.Enabled = false;
             MainForm_DownloadModeFull.Enabled = false;
+
+            // On empêche le changement de mode de tri
+            MainForm_SortInOneFolder.Enabled = false;
+            MainForm_SortBySet.Enabled = false;
 
             // On désactive le bouton de démarrage de la procédure de téléchargement
             MainForm_Button_StartDownload.Enabled = false;
@@ -313,7 +323,16 @@ namespace LoR_DDragonDownloader
 
                             foreach (string file in filesToMove)
                             {
-                                string newFile = file.Replace(Path.Combine(versionRootFolder, lang, "data"), Path.Combine(versionRootFolder, "..", "data"));
+                                string newFile = "";
+
+                                if (MainForm_SortInOneFolder.Checked == true)
+                                {
+                                    newFile = file.Replace(Path.Combine(versionRootFolder, lang, "data"), Path.Combine(versionRootFolder, "..", "data"));
+                                }
+                                else
+                                {
+                                    newFile = file.Replace(Path.Combine(versionRootFolder, lang, "data"), Path.Combine(versionRootFolder, "data"));
+                                }
 
                                 if (!Directory.Exists(Path.GetDirectoryName(newFile)))
                                 {
@@ -331,7 +350,16 @@ namespace LoR_DDragonDownloader
 
                             foreach (string file in filesToMove)
                             {
-                                string newFile = file.Replace(Path.Combine(versionRootFolder, lang, "img"), Path.Combine(versionRootFolder, "..", "img"));
+                                string newFile = "";
+
+                                if (MainForm_SortInOneFolder.Checked == true)
+                                {
+                                    newFile = file.Replace(Path.Combine(versionRootFolder, lang, "img"), Path.Combine(versionRootFolder, "..", "img"));
+                                }
+                                else
+                                {
+                                    newFile = file.Replace(Path.Combine(versionRootFolder, lang, "img"), Path.Combine(versionRootFolder, "img"));
+                                }
 
                                 if (!Directory.Exists(Path.GetDirectoryName(newFile)))
                                 {
@@ -356,7 +384,10 @@ namespace LoR_DDragonDownloader
                             currentTaskProgress = 60;
                             File.Delete(Path.Combine(downloadPath, fileName));
                             currentTaskProgress = 80;
-                            Directory.Delete(extractDirectory, true);
+                            if (MainForm_SortInOneFolder.Checked == true)
+                            {
+                                Directory.Delete(extractDirectory, true);
+                            }
                             currentTaskProgress = 100;
 
                             totalVersionsElementsFinished++;
@@ -409,6 +440,10 @@ namespace LoR_DDragonDownloader
             // On réactive le changement de mode de téléchargement
             MainForm_DownloadModeLight.Enabled = true;
             MainForm_DownloadModeFull.Enabled = true;
+
+            // On réactive le changement de mode de tri
+            MainForm_SortInOneFolder.Enabled = true;
+            MainForm_SortBySet.Enabled = true;
 
             // On réactive le bouton de démarrage de la procédure de téléchargement
             MainForm_Button_StartDownload.Enabled = true;
