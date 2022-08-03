@@ -55,6 +55,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_SortType = new System.Windows.Forms.GroupBox();
             this.MainForm_SortBySet = new System.Windows.Forms.RadioButton();
             this.MainForm_SortInOneFolder = new System.Windows.Forms.RadioButton();
+            this.App_Version = new System.Windows.Forms.Label();
             this.MainForm_Group_DownloadMode.SuspendLayout();
             this.MainForm_Group_DownloadProgress.SuspendLayout();
             this.MainForm_Group_Settings.SuspendLayout();
@@ -287,6 +288,16 @@ namespace LoR_DDragonDownloader
             this.MainForm_SortInOneFolder.Text = "Tri dans un seul dossier";
             this.MainForm_SortInOneFolder.UseVisualStyleBackColor = true;
             // 
+            // App_Version
+            // 
+            this.App_Version.ForeColor = System.Drawing.Color.DarkGray;
+            this.App_Version.Location = new System.Drawing.Point(598, 486);
+            this.App_Version.Name = "App_Version";
+            this.App_Version.Size = new System.Drawing.Size(274, 19);
+            this.App_Version.TabIndex = 7;
+            this.App_Version.Text = "Version %version%";
+            this.App_Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -294,6 +305,7 @@ namespace LoR_DDragonDownloader
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(95)))), ((int)(((byte)(95)))));
             this.ClientSize = new System.Drawing.Size(884, 520);
             this.ControlBox = false;
+            this.Controls.Add(this.App_Version);
             this.Controls.Add(this.MainForm_Group_SortType);
             this.Controls.Add(this.MainForm_Button_Quit);
             this.Controls.Add(this.MainForm_Button_StartDownload);
@@ -345,6 +357,7 @@ namespace LoR_DDragonDownloader
         private System.Windows.Forms.GroupBox MainForm_Group_SortType;
         private System.Windows.Forms.RadioButton MainForm_SortBySet;
         private System.Windows.Forms.RadioButton MainForm_SortInOneFolder;
+        private System.Windows.Forms.Label App_Version;
     }
 }
 

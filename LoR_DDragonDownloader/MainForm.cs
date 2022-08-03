@@ -13,6 +13,8 @@ namespace LoR_DDragonDownloader
 {
     public partial class MainForm : Form
     {
+        static public string appVersion = "1.0.0";
+
         static public string baseUrl = "https://dd.b.pvp.net/";
         static public List<string> versions = new List<string>();
         static public List<string> langs = new List<string>();
@@ -29,6 +31,8 @@ namespace LoR_DDragonDownloader
         public MainForm()
         {
             InitializeComponent();
+
+            App_Version.Text = "Version " + appVersion;
 
             GetVersionsList();
             GetLangsList();
