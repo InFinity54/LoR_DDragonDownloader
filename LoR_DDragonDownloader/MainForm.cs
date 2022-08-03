@@ -13,7 +13,7 @@ namespace LoR_DDragonDownloader
 {
     public partial class MainForm : Form
     {
-        static public string appVersion = "1.0.0";
+        static public string appVersion = "1.0.2";
 
         static public string baseUrl = "https://dd.b.pvp.net/";
         static public List<string> versions = new List<string>();
@@ -44,7 +44,8 @@ namespace LoR_DDragonDownloader
          */
         static void GetVersionsList()
         {
-            string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_versions.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "\\database\\runeterra_versions.json");
+            //string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_versions.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
@@ -407,27 +408,32 @@ namespace LoR_DDragonDownloader
 
                 // On génère le Metadata
                 currentTask = "Terminé";
-                currentVersion = "Génération du fichier \"metadata.json\"...";
                 string metadataSavePath = Path.Combine(MainForm_Settings_DownloadFolder_TextBox.Text, version);
-                string cardsFolder = "";
-                Metadata metadata = new Metadata();
 
-                if (MainForm_SortInOneFolder.Checked == true)
+                if (MainForm_SortInOneFolder.Checked == true ||
+                    (MainForm_SortBySet.Checked == true && Directory.Exists(metadataSavePath)))
                 {
-                    cardsFolder = Path.Combine(metadataSavePath, "img", "cards");
-                }
-                else
-                {
-                    cardsFolder = Path.Combine(metadataSavePath, "set1", "img", "cards");
-                }
+                    currentVersion = "Génération du fichier \"metadata.json\"...";
+                    string cardsFolder = "";
+                    Metadata metadata = new Metadata();
+
+                    if (MainForm_SortInOneFolder.Checked == true)
+                    {
+                        cardsFolder = Path.Combine(metadataSavePath, "img", "cards");
+                    }
+                    else
+                    {
+                        cardsFolder = Path.Combine(metadataSavePath, "set1", "img", "cards");
+                    }
 
 
-                foreach (string folder in Directory.GetDirectories(cardsFolder))
-                {
-                    metadata.locales.Add(folder.Replace(cardsFolder, "").Replace("\\", ""));
-                }
+                    foreach (string folder in Directory.GetDirectories(cardsFolder))
+                    {
+                        metadata.locales.Add(folder.Replace(cardsFolder, "").Replace("\\", ""));
+                    }
 
-                File.WriteAllText(Path.Combine(metadataSavePath, "metadata.json"), JsonConvert.SerializeObject(metadata, Formatting.Indented));
+                    File.WriteAllText(Path.Combine(metadataSavePath, "metadata.json"), JsonConvert.SerializeObject(metadata, Formatting.Indented));
+                }
 
                 // Une fois le traitement terminé pour cette version, on passe à la version suivante
                 globalElementsFinished++;
