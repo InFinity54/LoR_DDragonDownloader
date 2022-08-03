@@ -1,8 +1,8 @@
 # _Legends of Runeterra_ - _Data Dragon_ Downloader
 
-Logiciel permettant de télécharger automatiquement toutes les versions du _Data Dragon_ de _Legends of Runeterra_ depuis les serveurs de Riot Games. Disponible uniquement en français pour le moment.
+Software used to download automatically all available versions of _Data Dragon_ for [_Legends of Runeterra_](https://playruneterra.com) from _Riot Games_' servers. App only available in French for now, but will be fully translated in English in the future.
 
-## Installation
+## Install
 
 ```bash
 git clone https://github.com/InFinity54/LoR_DDragonDownloader.git LoR_DDragonDownloader
@@ -10,20 +10,26 @@ git clone https://github.com/InFinity54/LoR_DDragonDownloader.git LoR_DDragonDow
 
 ## Démarrage
 
-Ouvrir le fichier _LoR_DataDragonDownloader.sln_ avec Visual Studio.
+Open file `LoR_DataDragonDownloader.sln` with Visual Studio. The minimal version of [_Visual Studio_](https://visualstudio.microsoft.com) for this project is _Visual Studio 2022_.
 
-## Fonctionnement
+## How it work
 
-Une fois le programme démarré, il récupère, depuis ce dépôt Git, la liste des versions de _Legends of Runeterra_ grâce à un fichier JSON, mise à jour par mes soins à chaque nouvelle version. Notez qu'il est possible qu'il y ait quelques heures ou jours de délai entre la sortie de la version et son intégration au fichier JSON, puisque je ne suis pas un grand joueur de ce jeu (bien que je l'apprécie).
+When the software is started, it will read some JSON settings files, included in the "database" sub-folder of the compiled software. This list is updated by me after each new version of the game.
+Note that it can take some time before the file gets updated, because it's a manual process, that depends on _Riot_, and because I'm not playing a lot to this game.
 
-Une fois les versions récupérées en mémoire, si vous n'avez jamais démarré le programme, il vous invite à choisir le dossier de téléchargement du _Data Dragon_. Il est stocké dans un fichier de configuration dans le dossier du programme, et peut être changé manuellement directement depuis ce fichier ou par l'intermédiaire des paramètres directement dans le logiciel.
+After reading versions list, you'll be ask to choose a download folder. This folder will be saved in the app settings file, and can be edited directly in this settings file or with the app interface.
 
-Il existe deux modes de fonctionnement, qui sont automatiques :
-- Le premier mode consiste à télécharger l'intégralité du _Data Dragon_ concernant la dernière version publiée du jeu.
-- Le second mode consiste à télécharger l'intégralité du _Data Dragon_ de toutes les versions publiées du jeu, depuis la version 1.0.0.
+There are two way of downloading _Data Dragon_'s versions:
+* The first one will only download the latest version of _Data Dragon_ for _Legends of Runeterra_.
+* The second one will download all existing versions of _Data Dragon_ for _Legends of Runeterra_.
 
-Quel que soit le mode sélectionné, chaque version est divisée en plusieurs dizaines de dossiers compressés au format ZIP. Le programme se charge de les extraire afin de créer une arborescence précise, qui facilite l'utilisation du Data Dragon. Le programme se charge également de supprimer certains fichiers inutiles et d'en générer d'autres qui peuvent être utiles. Libre à vous de modifier les dossiers et fichiers téléchargés, ou même d'en supprimer une partie.
+Each of these downloading ways will download each zip files for a version, and extract them into a custom tree structure, which is easier too use in your projects.
+You can edit all folders and files, and even delete some of them, when download is finished: they are yours.
+
+In addition, there are two ways of sorting the extracted files after downloading:
+* The first one will merge all files in the selected download folder (which will contains two folders, called `data` and `img`, which are those included in zip files from _Riot_'s servers)
+* The second one will merge all files in the same way, but in a sub-folder which will be called based on the downloaded set (like `core` or `set1` for example).
 
 ## Note for non-French people
 
-Commits are already written in English to prepare a future translation of the code source and of this README file, which is coming in the next months.
+Commits are already written in English to prepare a future translation of the code source, which is coming in the next months.
