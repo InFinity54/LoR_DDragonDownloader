@@ -409,8 +409,18 @@ namespace LoR_DDragonDownloader
                 currentTask = "Terminé";
                 currentVersion = "Génération du fichier \"metadata.json\"...";
                 string metadataSavePath = Path.Combine(MainForm_Settings_DownloadFolder_TextBox.Text, version);
-                string cardsFolder = Path.Combine(metadataSavePath, "img", "cards");
+                string cardsFolder = "";
                 Metadata metadata = new Metadata();
+
+                if (MainForm_SortInOneFolder.Checked == true)
+                {
+                    cardsFolder = Path.Combine(metadataSavePath, "img", "cards");
+                }
+                else
+                {
+                    cardsFolder = Path.Combine(metadataSavePath, "set1", "img", "cards");
+                }
+
 
                 foreach (string folder in Directory.GetDirectories(cardsFolder))
                 {
