@@ -44,8 +44,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetVersionsList()
         {
-            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "\\database\\runeterra_versions.json");
-            //string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_versions.json");
+            string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_versions.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
