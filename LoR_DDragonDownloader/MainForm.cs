@@ -44,7 +44,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetVersionsList()
         {
-            string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_versions.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "/database/runeterra_versions.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
@@ -58,7 +58,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetLangsList()
         {
-            string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_langs.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "/database/runeterra_langs.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
@@ -72,7 +72,7 @@ namespace LoR_DDragonDownloader
          */
         static void GetSetsList()
         {
-            string jsonString = new WebClient().DownloadString("https://github.com/InFinity54/LoR_DDragonDownloader/raw/master/LoR_DDragonDownloader/database/runeterra_sets.json");
+            string jsonString = File.ReadAllText(Environment.CurrentDirectory + "/database/runeterra_sets.json");
             JArray json = JArray.Parse(jsonString);
 
             foreach (string version in json)
