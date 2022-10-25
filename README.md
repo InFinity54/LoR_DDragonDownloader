@@ -8,7 +8,7 @@ Software used to download automatically all available versions of _Data Dragon_ 
 git clone https://github.com/InFinity54/LoR_DDragonDownloader.git LoR_DDragonDownloader
 ```
 
-## Démarrage
+## Startup
 
 Open file `LoR_DataDragonDownloader.sln` with Visual Studio. The minimal version of [_Visual Studio_](https://visualstudio.microsoft.com) for this project is _Visual Studio 2022_.
 
