@@ -56,22 +56,25 @@ namespace LoR_DDragonDownloader
             this.MainForm_SortBySet = new System.Windows.Forms.RadioButton();
             this.MainForm_SortInOneFolder = new System.Windows.Forms.RadioButton();
             this.App_Version = new System.Windows.Forms.Label();
+            this.MainForm_Group_Language = new System.Windows.Forms.GroupBox();
+            this.MainForm_LanguageSelector = new System.Windows.Forms.ComboBox();
             this.MainForm_Group_DownloadMode.SuspendLayout();
             this.MainForm_Group_DownloadProgress.SuspendLayout();
             this.MainForm_Group_Settings.SuspendLayout();
             this.MainForm_Group_SortType.SuspendLayout();
+            this.MainForm_Group_Language.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainForm_Title
             // 
             this.MainForm_Title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.MainForm_Title.Font = new System.Drawing.Font("Segoe UI Black", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.MainForm_Title.Font = new System.Drawing.Font("Segoe UI Black", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
             this.MainForm_Title.Location = new System.Drawing.Point(12, 9);
             this.MainForm_Title.Name = "MainForm_Title";
-            this.MainForm_Title.Size = new System.Drawing.Size(860, 49);
+            this.MainForm_Title.Size = new System.Drawing.Size(655, 49);
             this.MainForm_Title.TabIndex = 0;
-            this.MainForm_Title.Text = "Legends of Runeterra - Data Dragon Downloader";
+            this.MainForm_Title.Text = "Legends of Runeterra\'s Data Dragon Downloader";
             this.MainForm_Title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm_Group_DownloadMode
@@ -85,16 +88,16 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_DownloadMode.Size = new System.Drawing.Size(860, 50);
             this.MainForm_Group_DownloadMode.TabIndex = 1;
             this.MainForm_Group_DownloadMode.TabStop = false;
-            this.MainForm_Group_DownloadMode.Text = "Mode de téléchargement";
+            this.MainForm_Group_DownloadMode.Text = "%downloadModeAreaTitle%";
             // 
             // MainForm_DownloadModeFull
             // 
             this.MainForm_DownloadModeFull.AutoSize = true;
             this.MainForm_DownloadModeFull.Location = new System.Drawing.Point(385, 22);
             this.MainForm_DownloadModeFull.Name = "MainForm_DownloadModeFull";
-            this.MainForm_DownloadModeFull.Size = new System.Drawing.Size(382, 19);
+            this.MainForm_DownloadModeFull.Size = new System.Drawing.Size(185, 19);
             this.MainForm_DownloadModeFull.TabIndex = 1;
-            this.MainForm_DownloadModeFull.Text = "Téléchargement de toutes les versions depuis la version 1.0.0 incluse";
+            this.MainForm_DownloadModeFull.Text = "%allVersionsDownloadMode%";
             this.MainForm_DownloadModeFull.UseVisualStyleBackColor = true;
             // 
             // MainForm_DownloadModeLight
@@ -102,9 +105,9 @@ namespace LoR_DDragonDownloader
             this.MainForm_DownloadModeLight.AutoSize = true;
             this.MainForm_DownloadModeLight.Location = new System.Drawing.Point(7, 22);
             this.MainForm_DownloadModeLight.Name = "MainForm_DownloadModeLight";
-            this.MainForm_DownloadModeLight.Size = new System.Drawing.Size(292, 19);
+            this.MainForm_DownloadModeLight.Size = new System.Drawing.Size(186, 19);
             this.MainForm_DownloadModeLight.TabIndex = 0;
-            this.MainForm_DownloadModeLight.Text = "Téléchargement de la dernière version uniquement";
+            this.MainForm_DownloadModeLight.Text = "%lastVersionDownloadMode%";
             this.MainForm_DownloadModeLight.UseVisualStyleBackColor = true;
             // 
             // MainForm_Description
@@ -115,7 +118,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Description.Name = "MainForm_Description";
             this.MainForm_Description.Size = new System.Drawing.Size(860, 58);
             this.MainForm_Description.TabIndex = 2;
-            this.MainForm_Description.Text = resources.GetString("MainForm_Description.Text");
+            this.MainForm_Description.Text = "%formDescription%";
             this.MainForm_Description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm_Group_DownloadProgress
@@ -131,7 +134,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_DownloadProgress.Size = new System.Drawing.Size(860, 196);
             this.MainForm_Group_DownloadProgress.TabIndex = 3;
             this.MainForm_Group_DownloadProgress.TabStop = false;
-            this.MainForm_Group_DownloadProgress.Text = "Progression";
+            this.MainForm_Group_DownloadProgress.Text = "%progressAreaTitle%";
             // 
             // MainForm_CurrentTaskProgressLabel
             // 
@@ -139,7 +142,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_CurrentTaskProgressLabel.Name = "MainForm_CurrentTaskProgressLabel";
             this.MainForm_CurrentTaskProgressLabel.Size = new System.Drawing.Size(847, 17);
             this.MainForm_CurrentTaskProgressLabel.TabIndex = 5;
-            this.MainForm_CurrentTaskProgressLabel.Text = "En attente du début du téléchargement...";
+            this.MainForm_CurrentTaskProgressLabel.Text = "%waitingDownloadStart%";
             this.MainForm_CurrentTaskProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm_CurrentTaskProgressBar
@@ -156,7 +159,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_GlobalProgressLabel.Name = "MainForm_GlobalProgressLabel";
             this.MainForm_GlobalProgressLabel.Size = new System.Drawing.Size(847, 17);
             this.MainForm_GlobalProgressLabel.TabIndex = 3;
-            this.MainForm_GlobalProgressLabel.Text = "En attente du début du téléchargement...";
+            this.MainForm_GlobalProgressLabel.Text = "%waitingDownloadStart%";
             this.MainForm_GlobalProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm_CurrentVersionProgressLabel
@@ -165,7 +168,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_CurrentVersionProgressLabel.Name = "MainForm_CurrentVersionProgressLabel";
             this.MainForm_CurrentVersionProgressLabel.Size = new System.Drawing.Size(847, 17);
             this.MainForm_CurrentVersionProgressLabel.TabIndex = 2;
-            this.MainForm_CurrentVersionProgressLabel.Text = "En attente du début du téléchargement...";
+            this.MainForm_CurrentVersionProgressLabel.Text = "%waitingDownloadStart%";
             this.MainForm_CurrentVersionProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm_CurrentVersionProgressBar
@@ -173,6 +176,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_CurrentVersionProgressBar.Location = new System.Drawing.Point(7, 102);
             this.MainForm_CurrentVersionProgressBar.Name = "MainForm_CurrentVersionProgressBar";
             this.MainForm_CurrentVersionProgressBar.Size = new System.Drawing.Size(847, 23);
+            this.MainForm_CurrentVersionProgressBar.Step = 1;
             this.MainForm_CurrentVersionProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.MainForm_CurrentVersionProgressBar.TabIndex = 1;
             // 
@@ -181,6 +185,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_GlobalProgressBar.Location = new System.Drawing.Point(7, 167);
             this.MainForm_GlobalProgressBar.Name = "MainForm_GlobalProgressBar";
             this.MainForm_GlobalProgressBar.Size = new System.Drawing.Size(847, 23);
+            this.MainForm_GlobalProgressBar.Step = 1;
             this.MainForm_GlobalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.MainForm_GlobalProgressBar.TabIndex = 0;
             // 
@@ -194,7 +199,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_Settings.Size = new System.Drawing.Size(558, 72);
             this.MainForm_Group_Settings.TabIndex = 4;
             this.MainForm_Group_Settings.TabStop = false;
-            this.MainForm_Group_Settings.Text = "Paramètres de l\'application";
+            this.MainForm_Group_Settings.Text = "%downloadSettingsAreaTitle%";
             // 
             // MainForm_Settings_DownloadFolder_Browse
             // 
@@ -203,7 +208,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Settings_DownloadFolder_Browse.Name = "MainForm_Settings_DownloadFolder_Browse";
             this.MainForm_Settings_DownloadFolder_Browse.Size = new System.Drawing.Size(75, 23);
             this.MainForm_Settings_DownloadFolder_Browse.TabIndex = 2;
-            this.MainForm_Settings_DownloadFolder_Browse.Text = "Parcourir";
+            this.MainForm_Settings_DownloadFolder_Browse.Text = "%downloadFolderSelection%";
             this.MainForm_Settings_DownloadFolder_Browse.UseVisualStyleBackColor = true;
             this.MainForm_Settings_DownloadFolder_Browse.Click += new System.EventHandler(this.MainForm_Settings_DownloadFolder_Browse_Click);
             // 
@@ -219,9 +224,9 @@ namespace LoR_DDragonDownloader
             this.MainForm_Settings_DownloadFolder_Label.AutoSize = true;
             this.MainForm_Settings_DownloadFolder_Label.Location = new System.Drawing.Point(6, 22);
             this.MainForm_Settings_DownloadFolder_Label.Name = "MainForm_Settings_DownloadFolder_Label";
-            this.MainForm_Settings_DownloadFolder_Label.Size = new System.Drawing.Size(233, 15);
+            this.MainForm_Settings_DownloadFolder_Label.Size = new System.Drawing.Size(184, 15);
             this.MainForm_Settings_DownloadFolder_Label.TabIndex = 0;
-            this.MainForm_Settings_DownloadFolder_Label.Text = "Chemin vers le dossier de téléchargement :";
+            this.MainForm_Settings_DownloadFolder_Label.Text = "%downloadFolderSelectionHint%";
             // 
             // MainForm_Button_StartDownload
             // 
@@ -230,7 +235,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Button_StartDownload.Name = "MainForm_Button_StartDownload";
             this.MainForm_Button_StartDownload.Size = new System.Drawing.Size(193, 23);
             this.MainForm_Button_StartDownload.TabIndex = 5;
-            this.MainForm_Button_StartDownload.Text = "Démarrer le téléchargement";
+            this.MainForm_Button_StartDownload.Text = "%downloadStartButton%";
             this.MainForm_Button_StartDownload.UseVisualStyleBackColor = true;
             this.MainForm_Button_StartDownload.Click += new System.EventHandler(this.MainForm_Button_StartDownload_Click);
             // 
@@ -241,7 +246,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Button_Quit.Name = "MainForm_Button_Quit";
             this.MainForm_Button_Quit.Size = new System.Drawing.Size(75, 23);
             this.MainForm_Button_Quit.TabIndex = 6;
-            this.MainForm_Button_Quit.Text = "Quitter";
+            this.MainForm_Button_Quit.Text = "%exitButton%";
             this.MainForm_Button_Quit.UseVisualStyleBackColor = true;
             this.MainForm_Button_Quit.Click += new System.EventHandler(this.MainForm_Button_Quit_Click);
             // 
@@ -266,16 +271,16 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_SortType.Size = new System.Drawing.Size(860, 50);
             this.MainForm_Group_SortType.TabIndex = 2;
             this.MainForm_Group_SortType.TabStop = false;
-            this.MainForm_Group_SortType.Text = "Mode de rangement";
+            this.MainForm_Group_SortType.Text = "%sortModeAreaTitle%";
             // 
             // MainForm_SortBySet
             // 
             this.MainForm_SortBySet.AutoSize = true;
             this.MainForm_SortBySet.Location = new System.Drawing.Point(385, 22);
             this.MainForm_SortBySet.Name = "MainForm_SortBySet";
-            this.MainForm_SortBySet.Size = new System.Drawing.Size(270, 19);
+            this.MainForm_SortBySet.Size = new System.Drawing.Size(81, 19);
             this.MainForm_SortBySet.TabIndex = 1;
-            this.MainForm_SortBySet.Text = "Tri des différents sets dans des dossiers séparés";
+            this.MainForm_SortBySet.Text = "%setSort%";
             this.MainForm_SortBySet.UseVisualStyleBackColor = true;
             // 
             // MainForm_SortInOneFolder
@@ -283,9 +288,9 @@ namespace LoR_DDragonDownloader
             this.MainForm_SortInOneFolder.AutoSize = true;
             this.MainForm_SortInOneFolder.Location = new System.Drawing.Point(7, 22);
             this.MainForm_SortInOneFolder.Name = "MainForm_SortInOneFolder";
-            this.MainForm_SortInOneFolder.Size = new System.Drawing.Size(146, 19);
+            this.MainForm_SortInOneFolder.Size = new System.Drawing.Size(119, 19);
             this.MainForm_SortInOneFolder.TabIndex = 0;
-            this.MainForm_SortInOneFolder.Text = "Tri dans un seul dossier";
+            this.MainForm_SortInOneFolder.Text = "%oneFolderSort%";
             this.MainForm_SortInOneFolder.UseVisualStyleBackColor = true;
             // 
             // App_Version
@@ -298,6 +303,34 @@ namespace LoR_DDragonDownloader
             this.App_Version.Text = "Version %version%";
             this.App_Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // MainForm_Group_Language
+            // 
+            this.MainForm_Group_Language.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MainForm_Group_Language.Controls.Add(this.MainForm_LanguageSelector);
+            this.MainForm_Group_Language.Location = new System.Drawing.Point(673, 12);
+            this.MainForm_Group_Language.Name = "MainForm_Group_Language";
+            this.MainForm_Group_Language.Size = new System.Drawing.Size(199, 46);
+            this.MainForm_Group_Language.TabIndex = 8;
+            this.MainForm_Group_Language.TabStop = false;
+            this.MainForm_Group_Language.Text = "%appLanguageAreaTitle%";
+            // 
+            // MainForm_LanguageSelector
+            // 
+            this.MainForm_LanguageSelector.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.MainForm_LanguageSelector.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.MainForm_LanguageSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MainForm_LanguageSelector.FormattingEnabled = true;
+            this.MainForm_LanguageSelector.Items.AddRange(new object[] {
+            "Français",
+            "English"});
+            this.MainForm_LanguageSelector.Location = new System.Drawing.Point(6, 17);
+            this.MainForm_LanguageSelector.MaxDropDownItems = 2;
+            this.MainForm_LanguageSelector.Name = "MainForm_LanguageSelector";
+            this.MainForm_LanguageSelector.Size = new System.Drawing.Size(187, 23);
+            this.MainForm_LanguageSelector.TabIndex = 0;
+            this.MainForm_LanguageSelector.SelectionChangeCommitted += new System.EventHandler(this.MainForm_LanguageSelector_SelectionChangeCommitted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -305,6 +338,7 @@ namespace LoR_DDragonDownloader
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(95)))), ((int)(((byte)(95)))));
             this.ClientSize = new System.Drawing.Size(884, 520);
             this.ControlBox = false;
+            this.Controls.Add(this.MainForm_Group_Language);
             this.Controls.Add(this.App_Version);
             this.Controls.Add(this.MainForm_Group_SortType);
             this.Controls.Add(this.MainForm_Button_Quit);
@@ -319,7 +353,7 @@ namespace LoR_DDragonDownloader
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Legends of Runeterra - Data Dragon Downloader";
+            this.Text = "Legends of Runeterra\'s Data Dragon Downloader";
             this.MainForm_Group_DownloadMode.ResumeLayout(false);
             this.MainForm_Group_DownloadMode.PerformLayout();
             this.MainForm_Group_DownloadProgress.ResumeLayout(false);
@@ -327,6 +361,7 @@ namespace LoR_DDragonDownloader
             this.MainForm_Group_Settings.PerformLayout();
             this.MainForm_Group_SortType.ResumeLayout(false);
             this.MainForm_Group_SortType.PerformLayout();
+            this.MainForm_Group_Language.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -358,6 +393,8 @@ namespace LoR_DDragonDownloader
         private System.Windows.Forms.RadioButton MainForm_SortBySet;
         private System.Windows.Forms.RadioButton MainForm_SortInOneFolder;
         private System.Windows.Forms.Label App_Version;
+        private System.Windows.Forms.GroupBox MainForm_Group_Language;
+        private System.Windows.Forms.ComboBox MainForm_LanguageSelector;
     }
 }
 

@@ -57,10 +57,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MainForm_Description.Text" xml:space="preserve">
-    <value>Choisissez un mode de téléchargement, puis cliquez sur "Démarrer le téléchargement" pour commencer la création du Data Dragon local pour Legends of Runeterra. Une connexion Internet en fibre optique est très fortement recommandée, en raison du grand nombre de fichiers à télécharger et de leur taille.
-Un troisième mode de téléchargement est en préparation afin de télécharger une version spécifique.</value>
-  </data>
   <metadata name="DataDragonWorker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
