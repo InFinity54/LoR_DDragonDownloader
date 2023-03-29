@@ -34,6 +34,12 @@ The app is translated in French and English. You can change the language used by
 
 This translation system has been made to be easily editable. This means that others languages can be added in the future. Actually, no other language than French and English are planned to be added.
 
+### Note about database
+
+The app use raw files located in `LoR_DDragonDownloader/database` folder to retrieve some informations, like availables languages, sets and versions of _Legends of Runeterra_. Please note that GitHub's cache system can prevent the app to detect a recently added version, set or language in the app.
+
+If it happens to you, please exit the app and wait at least 5 minutes before restarting it.
+
 ## Editing the app
 
 ### Install the software project
