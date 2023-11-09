@@ -259,6 +259,33 @@ namespace LoR_DDragonDownloader
             };
         }
 
+        public static string MovingPowersPicturesMessage()
+        {
+            return MainForm.appLanguage switch
+            {
+                "fr" => "Déplacement des images des pouvoirs...",
+                _ => "Moving powers pictures..."
+            };
+        }
+
+        public static string MovingRelicsPicturesMessage()
+        {
+            return MainForm.appLanguage switch
+            {
+                "fr" => "Déplacement des images des reliques...",
+                _ => "Moving relics pictures..."
+            };
+        }
+
+        public static string MovingItemsPicturesMessage()
+        {
+            return MainForm.appLanguage switch
+            {
+                "fr" => "Déplacement des images des objets...",
+                _ => "Moving items pictures..."
+            };
+        }
+
         public static string MovingFilesMessage()
         {
             return MainForm.appLanguage switch

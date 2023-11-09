@@ -13,7 +13,7 @@ namespace LoR_DDragonDownloader
 {
     public partial class MainForm : Form
     {
-        public string appVersion = "1.1.0";
+        public string appVersion = "1.2.0";
         static public string appLanguage = "en";
 
         public string baseUrl = "https://dd.b.pvp.net/";
@@ -26,7 +26,18 @@ namespace LoR_DDragonDownloader
         public MainForm()
         {
             InitializeComponent();
+            DetermineAppLanguage();
+            GetVersionsList();
+            GetLangsList();
+            GetSetsList();
+            InitFormTexts();
+        }
 
+        /**
+         * Define the current language of the app, based on app's settings.
+         */
+        public void DetermineAppLanguage()
+        {
             // Determine prefered language from settings file
             appLanguage = AppSettings.GetCurrentSettings()["language"].ToString();
 
@@ -41,11 +52,6 @@ namespace LoR_DDragonDownloader
                     MainForm_LanguageSelector.SelectedItem = "English";
                     break;
             }
-
-            GetVersionsList();
-            GetLangsList();
-            GetSetsList();
-            InitFormTexts();
         }
 
         /**
@@ -379,8 +385,8 @@ namespace LoR_DDragonDownloader
                             Directory.Delete(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName)), true);
                         }
 
-                        // If current set is not "core", cards images are handled first
-                        if (set != "core")
+                        // If current set is not "core" or "adventure", cards images are handled first
+                        if (set != "core" && set != "adventure")
                         {
                             List<String> cardsToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "cards"), "*.*").ToList();
                             int totalCardsToMove = cardsToMove.Count;
@@ -401,6 +407,88 @@ namespace LoR_DDragonDownloader
                                 }
 
                                 File.Move(card, newCard, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+                        }
+
+                        // If current set is "adventure", handle images for powers, relics & items of Path of Champions
+                        if (set == "adventure")
+                        {
+                            // Powers images
+                            List<String> powersToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "powers"), "*.*").ToList();
+                            int totalPowersToMove = powersToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingPowersPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalPowersToMove;
+                            });
+
+                            foreach (string power in powersToMove)
+                            {
+                                string newPower = Path.Combine(Path.GetDirectoryName(power), lang, Path.GetFileName(power));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newPower)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newPower));
+                                }
+
+                                File.Move(power, newPower, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+
+                            // Relics images
+                            List<String> relicsToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "relics"), "*.*").ToList();
+                            int totalRelicsToMove = relicsToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingRelicsPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalRelicsToMove;
+                            });
+
+                            foreach (string relic in relicsToMove)
+                            {
+                                string newRelic = Path.Combine(Path.GetDirectoryName(relic), lang, Path.GetFileName(relic));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newRelic)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newRelic));
+                                }
+
+                                File.Move(relic, newRelic, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+
+                            // Items images
+                            List<String> itemsToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "items"), "*.*").ToList();
+                            int totalItemsToMove = itemsToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingItemsPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalItemsToMove;
+                            });
+
+                            foreach (string item in itemsToMove)
+                            {
+                                string newItem = Path.Combine(Path.GetDirectoryName(item), lang, Path.GetFileName(item));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newItem)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newItem));
+                                }
+
+                                File.Move(item, newItem, true);
                                 Invoke((MethodInvoker)delegate ()
                                 {
                                     MainForm_CurrentTaskProgressBar.Value++;
