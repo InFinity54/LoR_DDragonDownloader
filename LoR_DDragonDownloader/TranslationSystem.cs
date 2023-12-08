@@ -41,6 +41,24 @@ namespace LoR_DDragonDownloader
             };
         }
 
+        public static string DownloadModeLastVersionLinksOnly()
+        {
+            return MainForm.appLanguage switch
+            {
+                "fr" => "Générer les liens de téléchargement des fichiers de la dernière version",
+                _ => "Generate latest version files download links list"
+            };
+        }
+
+        public static string DownloadModeLastVersionExtractOnly()
+        {
+            return MainForm.appLanguage switch
+            {
+                "fr" => "Extraction des fichiers pré-téléchargés de la dernière version",
+                _ => "Extract pre-downloaded latest version files"
+            };
+        }
+
         public static string DownloadModeAllVersions()
         {
             return MainForm.appLanguage switch
@@ -328,6 +346,15 @@ namespace LoR_DDragonDownloader
             {
                 "fr" => "Le Data Dragon a été installé avec succès dans le dossier \"" + folder + "\".",
                 _ => "Data Dragon is now installed in \"" + folder + "\"."
+            };
+        }
+
+        public static string FinishedLinksGenerationAlertMessage(string filename)
+        {
+            return MainForm.appLanguage switch
+            {
+                "fr" => "Les liens de téléchargement ont été sauvegardés dans le fichier suivant : \"" + filename + "\". Ouvrir le fichier ?",
+                _ => "Download links has been saved in the following file: \"" + filename + "\". Open the file?"
             };
         }
     }

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,7 +14,7 @@ namespace LoR_DDragonDownloader
 {
     public partial class MainForm : Form
     {
-        public string appVersion = "1.2.0";
+        public string appVersion = "1.3.0";
         static public string appLanguage = "en";
 
         public string baseUrl = "https://dd.b.pvp.net/";
@@ -112,6 +113,8 @@ namespace LoR_DDragonDownloader
             MainForm_Group_DownloadMode.Text = TranslationSystem.DownloadModeAreaTitle();
             MainForm_DownloadModeLight.Text = TranslationSystem.DownloadModeLastVersionOnly();
             MainForm_DownloadModeFull.Text = TranslationSystem.DownloadModeAllVersions();
+            MainForm_DownloadModeExtractOnly.Text = TranslationSystem.DownloadModeLastVersionExtractOnly();
+            MainForm_DownloadModeGenerateLinksOnly.Text = TranslationSystem.DownloadModeLastVersionLinksOnly();
             MainForm_Group_SortType.Text = TranslationSystem.DownloadSortAreaTitle();
             MainForm_SortInOneFolder.Text = TranslationSystem.DownloadSortInOneFolder();
             MainForm_SortBySet.Text = TranslationSystem.DownloadSortBySet();
@@ -124,7 +127,7 @@ namespace LoR_DDragonDownloader
                     MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.WaitingDDragonDownloadStart();
                     MainForm_CurrentVersionProgressLabel.Text = TranslationSystem.WaitingDDragonDownloadStart();
                     MainForm_GlobalProgressLabel.Text = TranslationSystem.WaitingDDragonDownloadStart();
-                } 
+                }
                 else
                 {
                     MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.FinishedMessage();
@@ -144,20 +147,20 @@ namespace LoR_DDragonDownloader
         {
             if (MessageBox.Show(TranslationSystem.ExitModalConfirmMessage(), MainForm_Title.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                System.Windows.Forms.Application.Exit();
+                Application.Exit();
             }
         }
 
         private void MainForm_Button_StartDownload_Click(object sender, EventArgs e)
         {
             // Handling required form inputs
-            if (!MainForm_DownloadModeLight.Checked == true && !MainForm_DownloadModeFull.Checked == true)
+            if (!MainForm_DownloadModeLight.Checked == true && !MainForm_DownloadModeFull.Checked == true && !MainForm_DownloadModeGenerateLinksOnly.Checked == true && !MainForm_DownloadModeExtractOnly.Checked == true)
             {
                 MessageBox.Show(TranslationSystem.DownloadStartUnknownDownloadModeError(), MainForm_Title.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            if (!MainForm_SortInOneFolder.Checked == true && !MainForm_SortBySet.Checked == true)
+            if (!MainForm_DownloadModeGenerateLinksOnly.Checked == true && !MainForm_SortInOneFolder.Checked == true && !MainForm_SortBySet.Checked == true)
             {
                 MessageBox.Show(TranslationSystem.DownloadStartUnknownSortModeError(), MainForm_Title.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -176,7 +179,7 @@ namespace LoR_DDragonDownloader
             }
 
             // Handling download folder subdirectories and foldey (if any)
-            if (Directory.GetDirectories(MainForm_Settings_DownloadFolder_TextBox.Text).Length > 0 || Directory.GetFiles(MainForm_Settings_DownloadFolder_TextBox.Text).Length > 0)
+            if (MainForm_DownloadModeExtractOnly.Checked != true && (Directory.GetDirectories(MainForm_Settings_DownloadFolder_TextBox.Text).Length > 0 || Directory.GetFiles(MainForm_Settings_DownloadFolder_TextBox.Text).Length > 0))
             {
                 if (MessageBox.Show(TranslationSystem.DownloadFolderIsNotEmptyMessage(), MainForm_Title.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
@@ -206,6 +209,8 @@ namespace LoR_DDragonDownloader
             MainForm_Settings_DownloadFolder_Browse.Enabled = false;
             MainForm_DownloadModeLight.Enabled = false;
             MainForm_DownloadModeFull.Enabled = false;
+            MainForm_DownloadModeExtractOnly.Enabled = false;
+            MainForm_DownloadModeGenerateLinksOnly.Enabled = false;
             MainForm_SortInOneFolder.Enabled = false;
             MainForm_SortBySet.Enabled = false;
 
@@ -226,7 +231,7 @@ namespace LoR_DDragonDownloader
                 });
                 DownloadDDragonForLatestVersion(versions[versions.Count - 1]);
             }
-            else
+            else if (MainForm_DownloadModeFull.Checked)
             {
                 // Starting download process for all versions
                 Invoke((MethodInvoker)delegate ()
@@ -234,6 +239,16 @@ namespace LoR_DDragonDownloader
                     MainForm_GlobalProgressLabel.Text = TranslationSystem.DownloadOfAllVersionsIsRunning();
                 });
                 DownloadDDragonForAllVersions();
+            }
+            else if (MainForm_DownloadModeExtractOnly.Checked)
+            {
+                // Starting extracting pre-downloaded files process for latest version only
+                ExtractDDragonFiles(versions[versions.Count - 1]);
+            }
+            else
+            {
+                // Starting download links list generation for latest version only
+                GenerateDDragonDownloadLinksList(versions[versions.Count - 1]);
             }
         }
 
@@ -705,6 +720,373 @@ namespace LoR_DDragonDownloader
             DownloadFinished();
         }
 
+        private void GenerateDDragonDownloadLinksList(string version)
+        {
+            string downloadLinksFileName = MainForm_Settings_DownloadFolder_TextBox.Text + "\\version_" + version + "_files_links.txt";
+            List<string> downloadLinks = new List<string>();
+
+            if (File.Exists(downloadLinksFileName))
+            {
+                File.Delete(downloadLinksFileName);
+            }
+
+            foreach (string set in sets)
+            {
+                foreach (string lang in langs)
+                {
+                    string fileName = set + "-" + lang + ".zip";
+                    string fileURL = baseUrl + version.Replace(".", "_") + "/" + fileName;
+                    downloadLinks.Add(fileURL);
+                }
+            }
+
+            File.WriteAllLines(downloadLinksFileName, downloadLinks);
+
+            if (MessageBox.Show(TranslationSystem.FinishedLinksGenerationAlertMessage(downloadLinksFileName), null, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(downloadLinksFileName)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+        }
+
+        private void ExtractDDragonFiles(string version)
+        {
+            // Configure progress bars for latest version only download process
+            Invoke((MethodInvoker)delegate ()
+            {
+                MainForm_GlobalProgressBar.Maximum = 1;
+            });
+
+            // Configure progress bars for download process
+            Invoke((MethodInvoker)delegate ()
+            {
+                MainForm_CurrentVersionProgressBar.Maximum = sets.Count * langs.Count;
+                MainForm_CurrentVersionProgressLabel.Text = TranslationSystem.DownloadingVersionMessage(version);
+                MainForm_CurrentTaskProgressBar.Maximum = 100;
+                MainForm_CurrentTaskProgressBar.Value = 0;
+                MainForm_CurrentTaskProgressBar.Style = ProgressBarStyle.Blocks;
+            });
+
+            // Executing extract process
+            foreach (string set in sets)
+            {
+                foreach (string lang in langs)
+                {
+                    string fileName = set + "-" + lang + ".zip";
+
+                    if (File.Exists(MainForm_Settings_DownloadFolder_TextBox.Text + "\\" + fileName))
+                    {
+                        // Handling file extraction
+                        string fileToExtract = Path.Combine(MainForm_Settings_DownloadFolder_TextBox.Text, fileName);
+                        string extractDirectory = Path.Combine(MainForm_Settings_DownloadFolder_TextBox.Text, version, set);
+                        Invoke((MethodInvoker)delegate ()
+                        {
+                            MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.ExtractingFileMessage(fileName);
+                            MainForm_CurrentTaskProgressBar.Value = 0;
+                            MainForm_CurrentTaskProgressBar.Style = ProgressBarStyle.Blocks;
+                        });
+
+                        using (ZipFile zip = ZipFile.Read(fileToExtract))
+                        {
+                            int totalFilesToExtract = zip.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressBar.Maximum = totalFilesToExtract;
+                            });
+
+                            zip.ExtractProgress += (sender, e) =>
+                            {
+                                if (e.EventType != ZipProgressEventType.Extracting_BeforeExtractEntry)
+                                    return;
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            };
+
+                            zip.ExtractAll(extractDirectory, ExtractExistingFileAction.OverwriteSilently);
+                        }
+
+                        // Handling folder refactoring
+                        string versionRootFolder = Path.Combine(MainForm_Settings_DownloadFolder_TextBox.Text, version, set);
+                        bool specialExtract = false;
+
+                        // Fix for version 1.3.0
+                        if (Directory.Exists(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName))))
+                        {
+                            specialExtract = true;
+                            List<String> tmpFilesToMove = Directory.GetFiles(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName)), "*.*", SearchOption.AllDirectories).ToList();
+                            int totalTmpFilesToMove = tmpFilesToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.PreparingFolderMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalTmpFilesToMove;
+                            });
+
+                            foreach (string tmpFile in tmpFilesToMove)
+                            {
+                                string newTmpFile = tmpFile.Replace("\\" + Path.GetFileNameWithoutExtension(fileName), "");
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newTmpFile)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newTmpFile));
+                                }
+
+                                File.Move(tmpFile, newTmpFile, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+
+                            Directory.Delete(Path.Combine(versionRootFolder, Path.GetFileNameWithoutExtension(fileName)), true);
+                        }
+
+                        // If current set is not "core" or "adventure", cards images are handled first
+                        if (set != "core" && set != "adventure")
+                        {
+                            List<String> cardsToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "cards"), "*.*").ToList();
+                            int totalCardsToMove = cardsToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingCardsPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalCardsToMove;
+                            });
+
+                            foreach (string card in cardsToMove)
+                            {
+                                string newCard = Path.Combine(Path.GetDirectoryName(card), lang, Path.GetFileName(card));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newCard)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newCard));
+                                }
+
+                                File.Move(card, newCard, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+                        }
+
+                        // If current set is "adventure", handle images for powers, relics & items of Path of Champions
+                        if (set == "adventure")
+                        {
+                            // Powers images
+                            List<String> powersToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "powers"), "*.*").ToList();
+                            int totalPowersToMove = powersToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingPowersPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalPowersToMove;
+                            });
+
+                            foreach (string power in powersToMove)
+                            {
+                                string newPower = Path.Combine(Path.GetDirectoryName(power), lang, Path.GetFileName(power));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newPower)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newPower));
+                                }
+
+                                File.Move(power, newPower, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+
+                            // Relics images
+                            List<String> relicsToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "relics"), "*.*").ToList();
+                            int totalRelicsToMove = relicsToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingRelicsPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalRelicsToMove;
+                            });
+
+                            foreach (string relic in relicsToMove)
+                            {
+                                string newRelic = Path.Combine(Path.GetDirectoryName(relic), lang, Path.GetFileName(relic));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newRelic)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newRelic));
+                                }
+
+                                File.Move(relic, newRelic, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+
+                            // Items images
+                            List<String> itemsToMove = Directory.GetFiles(Path.Combine(extractDirectory, lang, "img", "items"), "*.*").ToList();
+                            int totalItemsToMove = itemsToMove.Count;
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingItemsPicturesMessage();
+                                MainForm_CurrentTaskProgressBar.Value = 0;
+                                MainForm_CurrentTaskProgressBar.Maximum = totalItemsToMove;
+                            });
+
+                            foreach (string item in itemsToMove)
+                            {
+                                string newItem = Path.Combine(Path.GetDirectoryName(item), lang, Path.GetFileName(item));
+
+                                if (!Directory.Exists(Path.GetDirectoryName(newItem)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(newItem));
+                                }
+
+                                File.Move(item, newItem, true);
+                                Invoke((MethodInvoker)delegate ()
+                                {
+                                    MainForm_CurrentTaskProgressBar.Value++;
+                                });
+                            }
+                        }
+
+                        // Recreating "data" folder if files extracted in a subfolder
+                        if (specialExtract && set != "core")
+                        {
+                            string originalFile = Path.Combine(extractDirectory, lang, "data.json");
+                            string destinationFile = Path.Combine(extractDirectory, lang, "data", set + "-" + lang + ".json");
+
+                            if (!Directory.Exists(Path.Combine(extractDirectory, lang, "data")))
+                            {
+                                Directory.CreateDirectory(Path.Combine(extractDirectory, lang, "data"));
+                            }
+
+                            File.Move(originalFile, destinationFile);
+                        }
+
+                        List<string> filesToMove = Directory.GetFiles(Path.Combine(versionRootFolder, lang, "data"), "*.*", SearchOption.AllDirectories).ToList();
+                        int totalFilesToMove = filesToMove.Count;
+                        Invoke((MethodInvoker)delegate ()
+                        {
+                            MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.MovingFilesMessage();
+                            MainForm_CurrentTaskProgressBar.Value = 0;
+                            MainForm_CurrentTaskProgressBar.Maximum = totalFilesToMove;
+                        });
+
+                        foreach (string file in filesToMove)
+                        {
+                            string newFile = "";
+
+                            if (MainForm_SortInOneFolder.Checked == true)
+                            {
+                                newFile = file.Replace(Path.Combine(versionRootFolder, lang, "data"), Path.Combine(versionRootFolder, "..", "data"));
+                            }
+                            else
+                            {
+                                newFile = file.Replace(Path.Combine(versionRootFolder, lang, "data"), Path.Combine(versionRootFolder, "data"));
+                            }
+
+                            if (!Directory.Exists(Path.GetDirectoryName(newFile)))
+                            {
+                                Directory.CreateDirectory(Path.GetDirectoryName(newFile));
+                            }
+
+                            File.Move(file, newFile, true);
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressBar.Value++;
+                            });
+                        }
+
+                        filesToMove = Directory.GetFiles(Path.Combine(versionRootFolder, lang, "img"), "*.*", SearchOption.AllDirectories).ToList();
+                        totalFilesToMove = filesToMove.Count;
+                        Invoke((MethodInvoker)delegate ()
+                        {
+                            MainForm_CurrentTaskProgressBar.Value = 0;
+                            MainForm_CurrentTaskProgressBar.Maximum = totalFilesToMove;
+                        });
+
+                        foreach (string file in filesToMove)
+                        {
+                            string newFile = "";
+
+                            if (MainForm_SortInOneFolder.Checked == true)
+                            {
+                                newFile = file.Replace(Path.Combine(versionRootFolder, lang, "img"), Path.Combine(versionRootFolder, "..", "img"));
+                            }
+                            else
+                            {
+                                newFile = file.Replace(Path.Combine(versionRootFolder, lang, "img"), Path.Combine(versionRootFolder, "img"));
+                            }
+
+                            if (!Directory.Exists(Path.GetDirectoryName(newFile)))
+                            {
+                                Directory.CreateDirectory(Path.GetDirectoryName(newFile));
+                            }
+
+                            File.Move(file, newFile, true);
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                MainForm_CurrentTaskProgressBar.Value++;
+                            });
+                        }
+
+                        Directory.Delete(Path.Combine(versionRootFolder, lang), true);
+
+                        // Une fois le dossier réorganisé, on supprime les fichiers inutiles
+                        Invoke((MethodInvoker)delegate ()
+                        {
+                            MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.CleaningMessage();
+                            MainForm_CurrentTaskProgressBar.Value = 0;
+                            MainForm_CurrentTaskProgressBar.Maximum = 100;
+                            MainForm_CurrentTaskProgressBar.Style = ProgressBarStyle.Marquee;
+                        });
+                        File.Delete(Path.Combine(extractDirectory, "COPYRIGHT"));
+                        File.Delete(Path.Combine(extractDirectory, "metadata.json"));
+                        File.Delete(Path.Combine(extractDirectory, "README.md"));
+                        File.Delete(fileName);
+
+                        if (MainForm_SortInOneFolder.Checked == true)
+                        {
+                            Directory.Delete(extractDirectory, true);
+                        }
+                    }
+
+                    Invoke((MethodInvoker)delegate ()
+                    {
+                        MainForm_CurrentVersionProgressBar.Value++;
+                    });
+                }
+            }
+
+            // Updating progress bars, progress bar styles and progress texts
+            Invoke((MethodInvoker)delegate ()
+            {
+                MainForm_CurrentTaskProgressLabel.Text = TranslationSystem.FinishedMessage();
+                MainForm_CurrentTaskProgressBar.Maximum = 100;
+                MainForm_CurrentTaskProgressBar.Value = 100;
+                MainForm_CurrentTaskProgressBar.Style = ProgressBarStyle.Blocks;
+                MainForm_CurrentVersionProgressLabel.Text = TranslationSystem.FinishedMessage();
+                MainForm_CurrentVersionProgressBar.Maximum = 100;
+                MainForm_CurrentVersionProgressBar.Value = 100;
+                MainForm_CurrentVersionProgressBar.Style = ProgressBarStyle.Blocks;
+                MainForm_GlobalProgressLabel.Text = TranslationSystem.FinishedMessage();
+                MainForm_GlobalProgressBar.Value = 1;
+                MainForm_GlobalProgressBar.Style = ProgressBarStyle.Blocks;
+            });
+
+            // Reactivating UI
+            DownloadFinished();
+        }
+
         private void DownloadFinished()
         {
             Invoke((MethodInvoker)delegate ()
@@ -717,6 +1099,8 @@ namespace LoR_DDragonDownloader
                 MainForm_Settings_DownloadFolder_Browse.Enabled = true;
                 MainForm_DownloadModeLight.Enabled = true;
                 MainForm_DownloadModeFull.Enabled = true;
+                MainForm_DownloadModeExtractOnly.Enabled = true;
+                MainForm_DownloadModeGenerateLinksOnly.Enabled = true;
                 MainForm_SortInOneFolder.Enabled = true;
                 MainForm_SortBySet.Enabled = true;
 
@@ -762,6 +1146,22 @@ namespace LoR_DDragonDownloader
                     AppSettings.ChangeAppLanguage(appLanguage);
                     InitFormTexts();
                     break;
+            }
+        }
+
+        private void MainForm_DownloadModeGenerateLinksOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (MainForm_DownloadModeGenerateLinksOnly.Checked)
+            {
+                MainForm_SortInOneFolder.Checked = false;
+                MainForm_SortInOneFolder.Enabled = false;
+                MainForm_SortBySet.Checked = false;
+                MainForm_SortBySet.Enabled = false;
+            }
+            else
+            {
+                MainForm_SortInOneFolder.Enabled = true;
+                MainForm_SortBySet.Enabled = true;
             }
         }
     }
