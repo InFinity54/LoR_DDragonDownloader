@@ -1,11 +1,11 @@
-﻿using Ionic.Zip;
-using LoR_DataDragonDownloader;
+﻿using LoR_DataDragonDownloader;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
@@ -343,25 +343,37 @@ namespace LoR_DDragonDownloader
                             MainForm_CurrentTaskProgressBar.Style = ProgressBarStyle.Blocks;
                         });
 
-                        using (ZipFile zip = ZipFile.Read(fileToExtract))
+                        using (FileStream zipToOpen = new FileStream(fileToExtract, FileMode.Open, FileAccess.Read))
                         {
-                            int totalFilesToExtract = zip.Count;
-                            Invoke((MethodInvoker)delegate ()
+                            using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
                             {
-                                MainForm_CurrentTaskProgressBar.Maximum = totalFilesToExtract;
-                            });
-
-                            zip.ExtractProgress += (sender, e) =>
-                            {
-                                if (e.EventType != ZipProgressEventType.Extracting_BeforeExtractEntry)
-                                    return;
+                                int totalFilesToExtract = archive.Entries.Count;
                                 Invoke((MethodInvoker)delegate ()
                                 {
-                                    MainForm_CurrentTaskProgressBar.Value++;
+                                    MainForm_CurrentTaskProgressBar.Maximum = totalFilesToExtract;
                                 });
-                            };
 
-                            zip.ExtractAll(extractDirectory, ExtractExistingFileAction.OverwriteSilently);
+                                int extractedFilesCount = 0;
+
+                                foreach (ZipArchiveEntry entry in archive.Entries)
+                                {
+                                    string destinationPath = Path.Combine(extractDirectory, entry.FullName);
+                                    string directoryPath = Path.GetDirectoryName(destinationPath);
+
+                                    if (!string.IsNullOrEmpty(directoryPath))
+                                    {
+                                        Directory.CreateDirectory(directoryPath);
+                                    }
+
+                                    entry.ExtractToFile(destinationPath, overwrite: true);
+                                    extractedFilesCount++;
+
+                                    Invoke((MethodInvoker)delegate ()
+                                    {
+                                        MainForm_CurrentTaskProgressBar.Value = extractedFilesCount;
+                                    });
+                                }
+                            }
                         }
 
                         // Handling folder refactoring
@@ -790,25 +802,43 @@ namespace LoR_DDragonDownloader
                             MainForm_CurrentTaskProgressBar.Style = ProgressBarStyle.Blocks;
                         });
 
-                        using (ZipFile zip = ZipFile.Read(fileToExtract))
+                        using (FileStream zipToOpen = new FileStream(fileToExtract, FileMode.Open, FileAccess.Read))
                         {
-                            int totalFilesToExtract = zip.Count;
-                            Invoke((MethodInvoker)delegate ()
+                            using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
                             {
-                                MainForm_CurrentTaskProgressBar.Maximum = totalFilesToExtract;
-                            });
+                                int totalFilesToExtract = archive.Entries.Count;
 
-                            zip.ExtractProgress += (sender, e) =>
-                            {
-                                if (e.EventType != ZipProgressEventType.Extracting_BeforeExtractEntry)
-                                    return;
                                 Invoke((MethodInvoker)delegate ()
                                 {
-                                    MainForm_CurrentTaskProgressBar.Value++;
+                                    MainForm_CurrentTaskProgressBar.Maximum = totalFilesToExtract;
+                                    MainForm_CurrentTaskProgressBar.Value = 0;
                                 });
-                            };
 
-                            zip.ExtractAll(extractDirectory, ExtractExistingFileAction.OverwriteSilently);
+                                int extractedFilesCount = 0;
+
+                                foreach (ZipArchiveEntry entry in archive.Entries)
+                                {
+                                    string destinationPath = Path.Combine(extractDirectory, entry.FullName);
+
+                                    string directoryPath = Path.GetDirectoryName(destinationPath);
+                                    if (!string.IsNullOrEmpty(directoryPath))
+                                    {
+                                        Directory.CreateDirectory(directoryPath);
+                                    }
+
+                                    if (!string.IsNullOrEmpty(entry.Name))
+                                    {
+                                        entry.ExtractToFile(destinationPath, overwrite: true);
+                                    }
+
+                                    extractedFilesCount++;
+
+                                    Invoke((MethodInvoker)delegate ()
+                                    {
+                                        MainForm_CurrentTaskProgressBar.Value = extractedFilesCount;
+                                    });
+                                }
+                            }
                         }
 
                         // Handling folder refactoring
