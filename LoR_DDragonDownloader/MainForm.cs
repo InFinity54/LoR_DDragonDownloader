@@ -763,6 +763,9 @@ namespace LoR_DDragonDownloader
                 };
                 p.Start();
             }
+
+            // Reactivating UI
+            DownloadFinished();
         }
 
         private void ExtractDDragonFiles(string version)
