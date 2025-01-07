@@ -14,7 +14,7 @@ namespace LoR_DDragonDownloader
 {
     public partial class MainForm : Form
     {
-        public string appVersion = "1.3.0";
+        public string appVersion = "1.3.1";
         static public string appLanguage = "en";
 
         public string baseUrl = "https://dd.b.pvp.net/";
